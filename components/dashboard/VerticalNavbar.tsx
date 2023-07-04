@@ -23,8 +23,8 @@ const VerticalNavbar = (props: any) => {
 
   return (
     <div
-      className={`fixed duration-100 ease-in pb-10  min-h-screen rounded-r-lg   bg-gray-800 text-white flex flex-col  ${
-        isOpen ? "w-64" : "w-14"
+      className={`z-30 fixed duration-100 ease-in pb-10  min-h-screen rounded-r-lg   bg-gray-800 text-white flex flex-col  ${
+        isOpen ? "w-64" : "w-16"
       }`}>
       <div className="flex flex-row justify-between p-4">
         {!isOpen ? (
@@ -51,7 +51,7 @@ const VerticalNavbar = (props: any) => {
         )}
       </div>
       <div className="flex-grow overflow-y-auto">
-        <nav className="flex flex-col flex-1">
+        <nav className="flex flex-col flex-1 p-2">
           {navItems.map((item, index) => (
             <div key={index} className="flex flex-col">
               <Link
