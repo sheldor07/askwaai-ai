@@ -15,6 +15,12 @@ export default function Login() {
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // first checking if user exists
+    const { data: user } = await supabase.from('users').select('*').eq('email', email);
+    if (user) {
+      setError("User already exists");
+      return;
+    }
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -64,9 +70,8 @@ export default function Login() {
         Back
       </Link>
       <div className="flex flex-col items-center justify-center flex-1 gap-2 text-foreground">
-        <h1 className="text-3xl font-bold">Welcome to AskWaai</h1>
         {view === "check-email" ? (
-          <div className="flex flex-col justify-center flex-1 w-full gap-2 text-center text-foreground">
+          <div className="flex flex-col justify-center w-full gap-2 text-center text-foreground">
             <h1 className="text-3xl font-bold">Email has been sent!</h1>
             <p className=" text-foreground">
               Check <span className="font-bold">{email}</span> inbox to continue
@@ -74,68 +79,72 @@ export default function Login() {
             </p>
           </div>
         ) : (
-          <form
-            className="flex flex-col justify-center w-3/4 gap-2 p-6 mx-auto shadow-xl rounded-xl text-foreground"
-            onSubmit={view === "sign-in" ? handleSignIn : handleSignUp}>
-            <label className="text-md" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="px-4 py-2 mb-6 border rounded-md bg-inherit"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              placeholder="you@example.com"
-            />
-            <div className="flex flex-row justify-between">
-              <label className="text-md" htmlFor="password">
-                Password
+          <>
+            {" "}
+            <h1 className="text-3xl font-bold">Welcome to AskWaai</h1>
+            <form
+              className="flex flex-col justify-center w-3/4 gap-2 p-6 mx-auto shadow-xl rounded-xl text-foreground"
+              onSubmit={view === "sign-in" ? handleSignIn : handleSignUp}>
+              <label className="text-md" htmlFor="email">
+                Email
               </label>
-              <span className="text-red-500">{error}</span>
-            </div>
+              <input
+                className="px-4 py-2 mb-6 border rounded-md bg-inherit"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                placeholder="you@example.com"
+              />
+              <div className="flex flex-row justify-between">
+                <label className="text-md" htmlFor="password">
+                  Password
+                </label>
+                <span className="text-red-500">{error}</span>
+              </div>
 
-            <input
-              className={`px-4 py-2 mb-6 ${
-                error && " border-red-500"
-              } border rounded-md bg-inherit`}
-              type="password"
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              placeholder="••••••••"
-            />
+              <input
+                className={`px-4 py-2 mb-6 ${
+                  error && " border-red-500"
+                } border rounded-md bg-inherit`}
+                type="password"
+                name="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                placeholder="••••••••"
+              />
 
-            {view === "sign-in" && (
-              <>
-                <button className="px-4 py-2 mb-6 text-white rounded bg-violet-500">
-                  Sign In
-                </button>
-                <p className="text-sm text-center">
-                  Don't have an account?
-                  <button
-                    className="ml-1 underline"
-                    onClick={() => setView("sign-up")}>
-                    Sign Up Now
+              {view === "sign-in" && (
+                <>
+                  <button className="px-4 py-2 mb-6 text-white rounded bg-violet-500">
+                    Sign In
                   </button>
-                </p>
-              </>
-            )}
-            {view === "sign-up" && (
-              <>
-                <button className="px-4 py-2 mb-6 text-white bg-green-700 rounded">
-                  Sign Up
-                </button>
-                <p className="text-sm text-center">
-                  Already have an account?
-                  <button
-                    className="ml-1 underline"
-                    onClick={() => setView("sign-in")}>
-                    Sign In Now
+                  <p className="text-sm text-center">
+                    Don't have an account?
+                    <button
+                      className="ml-1 underline"
+                      onClick={() => setView("sign-up")}>
+                      Sign Up Now
+                    </button>
+                  </p>
+                </>
+              )}
+              {view === "sign-up" && (
+                <>
+                  <button className="px-4 py-2 mb-6 text-white rounded bg-violet-500">
+                    Sign Up
                   </button>
-                </p>
-              </>
-            )}
-          </form>
+                  <p className="text-sm text-center">
+                    Already have an account?
+                    <button
+                      className="ml-1 underline"
+                      onClick={() => setView("sign-in")}>
+                      Sign In Now
+                    </button>
+                  </p>
+                </>
+              )}
+            </form>
+          </>
         )}
       </div>
       <div className="flex flex-col justify-center flex-1 w-full gap-2 text-foreground">
