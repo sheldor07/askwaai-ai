@@ -16,8 +16,12 @@ export default function Login() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // first checking if user exists
-    const { data: user } = await supabase.from('users').select('*').eq('email', email);
-    if (user) {
+    const { data: user } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email);
+    if (user === null) {
+      console.log(user);
       setError("User already exists");
       return;
     }
@@ -45,7 +49,7 @@ export default function Login() {
       setError(error.message);
       return;
     }
-    router.push("/");
+    router.push("/dashboard/home");
     router.refresh();
   };
 
