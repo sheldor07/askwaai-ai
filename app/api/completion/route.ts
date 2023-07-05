@@ -10,8 +10,11 @@ export async function POST(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const prompt = searchParams.get("query");
+    const essayData  = await JSON.stringify(request.json());
+    if(!essayData) throw new Error("No essay data provided");
+    console.log("essayData",essayData);
 
-    const verdict = await generateVerdict(prompt);
+    const verdict = await generateVerdict(prompt,essayData);
     return NextResponse.json({ verdict });
   } catch (error) {
     console.error(error);
@@ -19,12 +22,13 @@ export async function POST(request: Request) {
   }
 }
 
-async function generateVerdict(prompt: string) {
-  // Generate a verdict based on the summary.
+async function generateVerdict(essayData: string,prompt: string) {
+  // Generate a verdict based on the summ:ary.
   let system_prompt =
-    "Refer to yourself, as the Fact Checker AI, You are an advanced AI that specializes in summarizing and analyzing information from fact-checking websites about various claims. Your goal is to identify the claims that are directly relevant to a given query, evaluate them objectively, and provide a balanced and fair verdict based on the information provided. Remember to maintain impartiality and rely only on the available facts. Limit your words to 100";
+    "You are an experienced AI writing assistant. Your role is to provide feedback and insights on the given input. The input consists of observations using the AEIOU framework, and the user has requested evaluation, identification of gaps, and suggestions for improvement. You should thoroughly analyze the provided observations and provide thoughtful and constructive feedback based on the questions posed. Your responses should help the user gain a deeper understanding of the AEIOU observations and guide them in capturing interactions, activities, and other essential aspects. Please provide comprehensive and informative answers to assist the user effectively.    ";
 
-  let user_prompt = `this is your query "${prompt}`;
+  let user_prompt = `This is your user written data ${essayData}, and this is your prompt ${prompt} Limit your response to 500 characters.`;
+  console.log("prompt", user_prompt);
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [

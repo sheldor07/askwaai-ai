@@ -115,8 +115,7 @@ export default function Page() {
         </button>
         <Sidebar
           currentPage={"empathise"}
-          aeiouData={aeiouData}
-          implicitDetails={implicitDetailsData}
+          essayData={JSON.stringify(aeiouData)}
         />
       </div>
     </>

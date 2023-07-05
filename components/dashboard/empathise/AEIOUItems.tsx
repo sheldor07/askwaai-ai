@@ -24,12 +24,12 @@ export default function AEIOUComp(props: {
         </p>
       </div>
       <div className="block w-full min-h-[500px]">
-        <input
+        <textarea
           type="text"
-          className="p-4 mt-10 text-center text-gray-900 rounded-lg shadow-sm sm:text-md focus:ring-blue-500 focus:border-blue-500 "
-          onChange={(e) => {
+          className="p-4 mt-10 overflow-auto text-sm text-left text-gray-900 rounded-lg shadow-sm h-4/5 sm:text-md focus:ring-blue-500 focus:border-blue-500 "
+          onChange={(e: ChangeEvent) => {
             handleChange(e);
-          }}></input>
+          }}></textarea>
       </div>
 
       <p className="p-2 text-sm text-slate-400">{props.content}</p>
