@@ -1,8 +1,8 @@
 "use client";
 import ImplicitExplicit from "@/components/dashboard/empathise/ImplicitExplicit";
-import ImplicitDetails from "@/components/dashboard/empathise/ImplicitDetails";
 import Blog1 from "@/components/dashboard/empathise/Blog1";
 import AEIOUComp from "@/components/dashboard/empathise/AEIOUItems";
+import Sidebar from "@/components/dashboard/sidebar/AIHelpContainer";
 import { useState } from "react";
 
 const colItems = [
@@ -34,25 +34,24 @@ const colItems = [
 export default function Page() {
   const [aeiouData, setAeiouData] = useState({
     A: {
-        name: "Activity",
-        content:
-        " "
+      name: "Activity",
+      content: " ",
     },
     E: {
-        name: "Environment",
-        content: " ",
+      name: "Environment",
+      content: " ",
     },
     I: {
-        name: "Interaction",
-        content: " ",
+      name: "Interaction",
+      content: " ",
     },
     O: {
-        name: "Object",
-        content: " ",
+      name: "Object",
+      content: " ",
     },
     U: {
-        name: "User",
-        content: " ",
+      name: "User",
+      content: " ",
     },
   });
   console.log(aeiouData);
@@ -99,7 +98,7 @@ export default function Page() {
           implicitDetails={implicitDetailsData}
           setImplicitDetails={setImplicitDetailsData}
           aeiouData={aeiouData}
-          colItems = {colItems}
+          colItems={colItems}
         />
       </div>
 
@@ -108,14 +107,17 @@ export default function Page() {
         <button className="flex flex-row px-4 py-2 text-lg text-white align-middle bg-blue-500 rounded-md ">
           Proceed
           <div className="inline-block px-1 py-1">
-            <img src="/dashboard/empathise/proceed_arrow.svg" alt="Proceed Arrow" />
+            <img
+              src="/dashboard/empathise/proceed_arrow.svg"
+              alt="Proceed Arrow"
+            />
           </div>
         </button>
-        {/* <AIHelpContainer
+        <Sidebar
           currentPage={"empathise"}
           aeiouData={aeiouData}
           implicitDetails={implicitDetailsData}
-        /> */}
+        />
       </div>
     </>
   );

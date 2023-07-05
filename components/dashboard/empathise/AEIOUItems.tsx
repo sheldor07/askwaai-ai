@@ -3,15 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from "react";
 export default function AEIOUComp(props: {
   name: string;
   content: string;
-  setAeiouData: Dispatch<
-    SetStateAction<{
-      A: string;
-      E: string;
-      I: string;
-      O: string;
-      U: string;
-    }>
-  >;
+  setAeiouData: any;
 }) {
   const firstLetter = props.name.substring(0, 1);
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
