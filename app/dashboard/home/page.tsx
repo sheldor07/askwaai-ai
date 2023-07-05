@@ -1,17 +1,8 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Timeline from "@/components/dashboard/home/Timeline";
-import VerticalNavbar from "@/components/dashboard/VerticalNavbar";
-export default async function Home() {
-  const supabase = createServerComponentClient({ cookies });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  console.log(cookies);
+export default async function Home() {
   return (
     <div className="flex h-screen bg-white">
-      <VerticalNavbar userEmail={user?.email} />
       <div className="flex flex-col w-full ml-20">
         <div className="py-10 text-center">
           <p className="text-sm font-light text-violet-400">
