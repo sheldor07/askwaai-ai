@@ -33,11 +33,27 @@ const colItems = [
 
 export default function Page() {
   const [aeiouData, setAeiouData] = useState({
-    A: "",
-    E: "",
-    I: "",
-    O: "",
-    U: "",
+    A: {
+        name: "Activity",
+        content:
+        " "
+    },
+    E: {
+        name: "Environment",
+        content: " ",
+    },
+    I: {
+        name: "Interaction",
+        content: " ",
+    },
+    O: {
+        name: "Object",
+        content: " ",
+    },
+    U: {
+        name: "User",
+        content: " ",
+    },
   });
   console.log(aeiouData);
   const [implicitExplicitData, setImplicitExplicitData] = useState("");
@@ -81,8 +97,7 @@ export default function Page() {
       <div className="ml-24">
         <ImplicitExplicit
           implicitDetails={implicitDetailsData}
-          setImplicitExplicitData={setImplicitExplicitData}
-          setImplicitDetailsData={setImplicitDetailsData}
+          setImplicitDetails={setImplicitDetailsData}
           aeiouData={aeiouData}
           colItems = {colItems}
         />

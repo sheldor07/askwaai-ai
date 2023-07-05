@@ -1,4 +1,4 @@
-import ImplicitDetails from "./ImplicitDetails";
+
 export default function Blog1() {
   return (
     <>
@@ -16,7 +16,7 @@ export default function Blog1() {
           </div>
         </div>
         <div className="flex flex-col h-full align-middle">
-          <ImplicitDetails />
+
         </div>
       </div>
     </>

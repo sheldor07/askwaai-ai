@@ -1,15 +1,26 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 export default function AEIOUComp(props: {
   name: string;
   content: string;
-  setAEIOUData: any;
+  setAeiouData: Dispatch<
+    SetStateAction<{
+      A: string;
+      E: string;
+      I: string;
+      O: string;
+      U: string;
+    }>
+  >;
 }) {
   const firstLetter = props.name.substring(0, 1);
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     props.setAeiouData((prevState: any) => ({
       ...prevState,
-      [firstLetter]: e.target.value,
+      [firstLetter]: {
+        name: props.name,
+        content: e.target.value,
+      },
     }));
   }
   return (
