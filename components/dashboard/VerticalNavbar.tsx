@@ -6,8 +6,8 @@ const VerticalNavbar = (props: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const navItems = [
     { name: "Home", link: "/" },
-    { name: "Empathise", link: "/home/empathize" },
-    { name: "Gather Insights", link: "/home/empathize" },
+    { name: "Empathise", link: "/dashboard/empathise" },
+    { name: "Gather Insights", link: "/dashboard/empathise" },
     { name: "Craft Question", link: "/home/question" },
     { name: "Introduce Op-Ed", link: "/home/introduce" },
     { name: "Find Sources", link: "/home/sources" },
