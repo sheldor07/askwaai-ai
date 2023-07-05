@@ -11,16 +11,37 @@ export default function AIChatWindow(props: any) {
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
-  function sendPrompt(question: string) {
+  async function sendPrompt(question: string) {
     setPrompt(question);
     toggleChatScreen();
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch(`/api/completion?query=${question}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          return data;
+        });
+      console.log(response);
       setLoading(false);
       setGotResponse(true);
-      setResponse("This is the response");
-    }, 300);
+      setResponse(response?.verdict); // assuming the AI's response is in responseData.choices[0].text
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      setGotResponse(true);
+      setResponse("Error: " + err);
+      return;
+    }
+
   }
+
   const explainQuestions = {
     default: [
       "Explain the task I am supposed to do",
@@ -65,7 +86,6 @@ export default function AIChatWindow(props: any) {
       ],
     },
   };
-
 
   const feedbackQuestions = {
     default: ["Can you check my grammar?", "Give me feedback on this"],
