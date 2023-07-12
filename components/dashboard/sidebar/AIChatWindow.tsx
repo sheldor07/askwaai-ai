@@ -1,13 +1,14 @@
-import { useState } from "react";
-import Image from "next/image";
+import { useState,useContext } from "react";
 import { pairedPrompts } from "@/app/utils/pairedPrompts";
-
+import { UserContext } from "@/app/dashboard/layout";
 type ChatHistoryItem = {
   question: string;
   response: any;
 };
 
 export default function AIChatWindow(props: any) {
+  const user = useContext(UserContext);
+  console.log("user", user);
   const currentPage = props.currentPage;
   const essayData = props.essayData;
   const [chatScreen, setChatScreen] = useState(false);

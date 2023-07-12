@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "@/app/dashboard/layout";
 const VerticalNavbar = (props: any) => {
-  const [user, setUser] = useState(props.userEmail.split("@")[0]);
+  const user = useContext(UserContext);
+  const [userEmail,setUserEmail] = useState(user?.email);
   const [isOpen, setIsOpen] = useState(false);
   const navItems = [
     { name: "Home", link: "/" },
@@ -78,8 +80,8 @@ const VerticalNavbar = (props: any) => {
             <img src={`/navbar-svg/avatar.svg`} alt="use avatar" />
           </div>
           <div className="flex flex-col px-2">
-            <span className="font-bold text-md ">{user}</span>
-            <span className="text-xs text-slate-300"> {props.userEmail}</span>
+            <span className="font-bold text-md ">{userEmail}</span>
+            <span className="text-xs text-slate-300"> {userEmail}</span>
           </div>
         </div>
       ) : (
