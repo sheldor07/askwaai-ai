@@ -4,19 +4,19 @@ import { useState, useContext } from "react";
 import { UserContext } from "@/app/dashboard/layout";
 const VerticalNavbar = (props: any) => {
   const user = useContext(UserContext);
-  const [userEmail,setUserEmail] = useState(user?.email);
+  const [userEmail, setUserEmail] = useState(user?.email);
   const [isOpen, setIsOpen] = useState(false);
   const navItems = [
     { name: "Home", link: "/dashboard/home" },
     { name: "Empathise", link: "/dashboard/empathise" },
     { name: "Gather Insights", link: "/dashboard/empathise" },
-    { name: "Craft Question", link: "/home/question" },
-    { name: "Introduce Op-Ed", link: "/home/introduce" },
-    { name: "Find Sources", link: "/home/sources" },
-    { name: "Comprehend & Collate", link: "/home/collate" },
-    { name: "Identify & Ideate", link: "/home/ideate" },
-    { name: "Summarise & Reflect", link: "/home/ideate" },
-    { name: "Conclude & Refine", link: "/home/conclude" },
+    { name: "Craft Question", link: "/dashboard/question" },
+    { name: "Introduce Op-Ed", link: "/dashboard/introduce" },
+    { name: "Find Sources", link: "/dashboard/sources" },
+    { name: "Comprehend & Collate", link: "/dashboard/collate" },
+    { name: "Identify & Ideate", link: "/dashboard/ideate" },
+    { name: "Summarise & Reflect", link: "/dashboard/ideate" },
+    { name: "Conclude & Refine", link: "/dashboard/conclude" },
   ];
 
   const toggleNavbar = () => {

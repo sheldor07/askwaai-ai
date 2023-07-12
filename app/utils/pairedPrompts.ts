@@ -130,9 +130,26 @@ export const pairedPrompts = {
 
     introduce: {
       "Assignment 1": [
-        "Evaluate the vividness of my descriptions. Are they too general or unfocused?",
-        "Assess the depth of my analysis. Have I analyzed the significant details from my observations?",
-        "Review the specificity and openness of my question. Does it encourage discussion and offer a clear motivation for writing?",
+        {
+          question: "Evaluate the vividness of my descriptions. Are they too general or unfocused?",
+          prompt: "Please provide your insights about the vividness of your descriptions. Are there parts that seem too general or unfocused? How could they be enhanced?"
+        },
+        {
+          question: "Assess the depth of my analysis. Have I analyzed the significant details from my observations?",
+          prompt: "Reflect on the depth of your analysis. Have you thoroughly analyzed the significant details from your observations? What elements could you delve deeper into?"
+        },
+        {
+          question: "Review the specificity and openness of my question. Does it encourage discussion and offer a clear motivation for writing?",
+          prompt: "Evaluate your research question in terms of its specificity and openness. Does it encourage an engaging discussion? How well does it motivate your writing?"
+        },
+        {
+          question: "How well have I used sensory and descriptive language in my writing?",
+          prompt: "Consider the use of sensory and descriptive language in your writing. How effectively have you engaged your reader's senses to describe your topic?"
+        },
+        {
+          question: "Does my writing clearly show rather than tell about the topic?",
+          prompt: "Reflect on your writing. Does it successfully 'show' rather than 'tell' about your topic? How well have you used specific details and examples to illustrate your points?"
+        },
       ],
     },
 

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const prompt = searchParams.get("query");
     const essayData  = await JSON.stringify(request.json());
     if(!essayData) throw new Error("No essay data provided");
-    console.log("essayData",essayData);
+    console.log("essay data in ai", essayData);
 
     const verdict = await generateVerdict(prompt,essayData);
     return NextResponse.json({ verdict });

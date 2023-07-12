@@ -70,6 +70,7 @@ export default function AIChatWindow(props: any) {
     setLoading(true);
     toggleChatScreen();
 
+    console.log("Sending data: ", essayData);
     // Send the request to the completion API
     const response = await fetch(`/api/completion?query=${question}`, {
       method: "POST",
@@ -125,7 +126,9 @@ export default function AIChatWindow(props: any) {
           onClick={() => {
             props.toggleChatWindow();
           }}>
-          <img src="/navbar-svg/close.svg" alt="AI Help Bot" />
+          <div className="w-5 h-5 mx-auto">
+            <img src="/navbar-svg/close.svg" alt="Close" />
+          </div>
         </button>
       </div>
       {loading ? (
@@ -135,7 +138,7 @@ export default function AIChatWindow(props: any) {
           {chatHistory.map(
             (item, index) =>
               item && (
-                <>
+                <div key={index}>
                   <div className="flex justify-end w-full p-2 my-2">
                     {" "}
                     <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
@@ -148,7 +151,7 @@ export default function AIChatWindow(props: any) {
                       {item.response}
                     </p>
                   </div>
-                </>
+                </div>
               )
           )}
         </div>
