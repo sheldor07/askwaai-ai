@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef, use } from "react";
 import { pairedPrompts } from "@/app/utils/pairedPrompts";
 import { UserContext } from "@/app/dashboard/layout";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -10,7 +10,6 @@ type ChatHistoryItem = {
 
 export default function AIChatWindow(props: any) {
   const user = useContext(UserContext);
-  console.log("user", user);
   const supabase = createClientComponentClient();
   const currentPage = props.currentPage;
   const essayData = props.essayData;
@@ -24,12 +23,17 @@ export default function AIChatWindow(props: any) {
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
-    fetchChatHistory();
-  }, [prompt]); // Empty dependency array means this effect runs once on mount
+    scrollToBottom();
+  }, [chatHistory]);
 
   async function fetchChatHistory() {
-    console.log("user", user?.id);
     try {
       let { data: chat_histories, error } = await supabase
         .from("chat_histories")
@@ -38,12 +42,7 @@ export default function AIChatWindow(props: any) {
       if (error) {
         console.error("Error fetching chat history:", error);
       } else {
-        console.log("Chat history fetched successfully:", chat_histories);
-        console.log(chat_histories);
-        setChatHistory(chat_histories); // Set chat history here
-        chatHistory.map((item, index) => {
-          console.log(item);
-        });
+        setChatHistory(chat_histories);
       }
     } catch (error) {
       console.error("Error fetching chat history:", error);
@@ -59,57 +58,57 @@ export default function AIChatWindow(props: any) {
       if (error) {
         console.error("Error inserting chat history:", error);
       } else {
-        console.log("Chat history inserted successfully:", data);
+        fetchChatHistory();
       }
     } catch (error) {
       console.error("Error inserting chat history:", error);
     }
   }
-
   async function sendPrompt(question: string) {
-    setPrompt(question);
-    toggleChatScreen();
+    // Set loading state
+    fetchChatHistory();
     setLoading(true);
-    try {
-      const response = await fetch(`/api/completion?query=${question}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          essayData,
-        }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          return data;
-        });
-      console.log(response);
-      setLoading(false);
-      setGotResponse(true);
-      setResponse(response?.verdict);
-      setChatHistory([
-        ...chatHistory,
-        { question, response: response?.verdict },
-      ]);
+    toggleChatScreen();
 
-      insertChatHistory(question, response?.verdict); // Insert chat history here
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-      setGotResponse(true);
-      setResponse("Error: " + err);
-      return;
-    }
+    // Send the request to the completion API
+    const response = await fetch(`/api/completion?query=${question}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        essayData,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        // Set error state
+        setGotResponse(true);
+        // Insert error message into chat history
+        return "Error: " + err;
+      });
+
+    // Once we have the response, insert it into the chat history
+    // And then refresh the chat history
+    await insertChatHistory(question, response?.verdict);
+    setLoading(false);
+
+    setGotResponse(true);
+    fetchChatHistory();
   }
 
   const selectedPrompts = pairedPrompts[currentPage];
-  console.log("selected prompts", selectedPrompts);
+
   return (
-    <div className="z-30 shadow-lg bg-white flex rounded-xl flex-col overflow-auto  max-w-[500px]  max-h-[600px] h-full align-items-center">
-      <div className="flex flex-row justify-between px-4 py-1 border-2 border-slate-100">
+    <div className="z-30 shadow-lg bg-white flex rounded-xl flex-col overflow-auto min-w-[500px] max-w-[500px] max-h-[600px] h-full align-items-center p-2">
+      <div className="flex flex-row justify-between p-2 mb-4 bg-gray-100 border-2 rounded-lg shadow-lg border-slate-100">
         <div className="flex flex-row w-full">
           <div className="w-5 h-5 my-auto mr-2">
             <img src="/dashboard/sidebar/AIHelpBot.svg" alt="AI Help Bot" />
@@ -129,41 +128,28 @@ export default function AIChatWindow(props: any) {
           <img src="/navbar-svg/close.svg" alt="AI Help Bot" />
         </button>
       </div>
-      {chatScreen ? (
+      {loading ? (
+        <div>Loading...</div> // replace this with a spinner or loading animation
+      ) : chatScreen ? (
         <div className="overflow-auto h-96">
-          {chatHistory.map((item, index) => (
-            <>
-              <div className="flex justify-end w-full p-2 my-2">
-                {" "}
-                <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
-                  {item?.message}
-                </p>
-              </div>
-              <div className="flex justify-start w-full p-2 my-2">
-                {" "}
-                <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
-                  {item?.response}
-                </p>
-              </div>
-            </>
-          ))}
-          <div className="flex justify-end w-full p-2 my-2">
-            <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
-              {prompt}
-            </p>
-          </div>
-          {loading ? (
-            <div className="flex justify-start w-full p-2 my-2">
-              <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
-                Loading...
-              </p>
-            </div>
-          ) : (
-            <div className="flex justify-start w-full p-2 my-2">
-              <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
-                {JSON.stringify(response)}
-              </p>
-            </div>
+          {chatHistory.map(
+            (item, index) =>
+              item && (
+                <>
+                  <div className="flex justify-end w-full p-2 my-2">
+                    {" "}
+                    <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
+                      {item.message}
+                    </p>
+                  </div>
+                  <div className="flex justify-start w-full p-2 my-2">
+                    {" "}
+                    <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
+                      {item.response}
+                    </p>
+                  </div>
+                </>
+              )
           )}
         </div>
       ) : (
@@ -187,6 +173,7 @@ export default function AIChatWindow(props: any) {
                   : null}
               </div>
             ))}
+            {chatScreen && gotResponse ? <div ref={messagesEndRef} /> : null}
           </div>
 
           {/* <div className="flex flex-col justify-center w-full my-2 text-center h-1/2">
