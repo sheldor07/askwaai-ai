@@ -1,11 +1,10 @@
-
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { pairedPrompts } from "@/app/utils/pairedPrompts";
 import { UserContext } from "@/app/dashboard/layout";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type ChatHistoryItem = {
-  question: string;
+  message: string;
   response: any;
 };
 
@@ -20,16 +19,43 @@ export default function AIChatWindow(props: any) {
   const [loading, setLoading] = useState(false);
   const [gotResponse, setGotResponse] = useState(false);
   const [response, setResponse] = useState("");
-  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
+  const [chatHistory, setChatHistory] = useState([]);
 
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
+  useEffect(() => {
+    fetchChatHistory();
+  }, [prompt]); // Empty dependency array means this effect runs once on mount
+
+  async function fetchChatHistory() {
+    console.log("user", user?.id);
+    try {
+      let { data: chat_histories, error } = await supabase
+        .from("chat_histories")
+        .select("*")
+        .eq("user_uuid", user?.id);
+      if (error) {
+        console.error("Error fetching chat history:", error);
+      } else {
+        console.log("Chat history fetched successfully:", chat_histories);
+        console.log(chat_histories);
+        setChatHistory(chat_histories); // Set chat history here
+        chatHistory.map((item, index) => {
+          console.log(item);
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching chat history:", error);
+    }
+  }
+
   async function insertChatHistory(question: string, response: string) {
     try {
       const { data, error } = await supabase
         .from("chat_histories")
         .insert([{ message: question, response, user_uuid: user?.id }]);
+
       if (error) {
         console.error("Error inserting chat history:", error);
       } else {
@@ -64,7 +90,11 @@ export default function AIChatWindow(props: any) {
       setLoading(false);
       setGotResponse(true);
       setResponse(response?.verdict);
-      setChatHistory([...chatHistory, { question, response }]);
+      setChatHistory([
+        ...chatHistory,
+        { question, response: response?.verdict },
+      ]);
+
       insertChatHistory(question, response?.verdict); // Insert chat history here
     } catch (err) {
       console.log(err);
@@ -78,7 +108,7 @@ export default function AIChatWindow(props: any) {
   const selectedPrompts = pairedPrompts[currentPage];
   console.log("selected prompts", selectedPrompts);
   return (
-    <div className="z-30 shadow-lg bg-white flex rounded-xl flex-col  max-w-[500px]  max-h-[800px] h-full align-items-center">
+    <div className="z-30 shadow-lg bg-white flex rounded-xl flex-col overflow-auto  max-w-[500px]  max-h-[600px] h-full align-items-center">
       <div className="flex flex-row justify-between px-4 py-1 border-2 border-slate-100">
         <div className="flex flex-row w-full">
           <div className="w-5 h-5 my-auto mr-2">
@@ -99,55 +129,67 @@ export default function AIChatWindow(props: any) {
           <img src="/navbar-svg/close.svg" alt="AI Help Bot" />
         </button>
       </div>
-      {
-        // Chat Screen
-        chatScreen ? (
-          <div>
-            <div className="flex flex-col overflow-y-auto">
-              <div className="flex flex-row justify-end w-full p-2 my-2 ">
+      {chatScreen ? (
+        <div className="overflow-auto h-96">
+          {chatHistory.map((item, index) => (
+            <>
+              <div className="flex justify-end w-full p-2 my-2">
+                {" "}
                 <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
-                  {prompt}
+                  {item?.message}
                 </p>
               </div>
-              {loading ? (
-                <div className="flex flex-row justify-start w-full p-2 my-2 ">
-                  <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
-                    Loading...
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-row justify-start w-full p-2 my-2 ">
-                  <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
-                    {response}
-                  </p>
-                </div>
-              )}
-            </div>
+              <div className="flex justify-start w-full p-2 my-2">
+                {" "}
+                <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
+                  {item?.response}
+                </p>
+              </div>
+            </>
+          ))}
+          <div className="flex justify-end w-full p-2 my-2">
+            <p className="p-2 text-sm text-white bg-blue-500 rounded-xl">
+              {prompt}
+            </p>
           </div>
-        ) : (
-          <div className="flex flex-col justify-center w-full p-6 h-5/6">
-            <div className="flex flex-col justify-center w-full my-2 text-center h-1/2">
-              {/* ...rest of the code */}
-              {Object.keys(selectedPrompts).map((key, index) => (
-                <div key={index}>
-                  <p>{key}</p>
-                  {Array.isArray(selectedPrompts[key])
-                    ? selectedPrompts[key].map((promptPair: any, i: number) => (
-                        <button
-                          className="w-full p-2 my-2 text-sm text-center rounded-md text-slate-800 bg-slate-100"
-                          key={i}
-                          onClick={() => {
-                            sendPrompt(promptPair.question);
-                          }}>
-                          {promptPair.question}
-                        </button>
-                      ))
-                    : null}
-                </div>
-              ))}
+          {loading ? (
+            <div className="flex justify-start w-full p-2 my-2">
+              <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
+                Loading...
+              </p>
             </div>
+          ) : (
+            <div className="flex justify-start w-full p-2 my-2">
+              <p className="p-2 text-sm text-white bg-slate-500 rounded-xl">
+                {JSON.stringify(response)}
+              </p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center w-full p-6 h-5/6">
+          <div className="flex flex-col justify-center w-full my-2 text-center h-1/2">
+            {/* ...rest of the code */}
+            {Object.keys(selectedPrompts).map((key, index) => (
+              <div key={index}>
+                <p>{key}</p>
+                {Array.isArray(selectedPrompts[key])
+                  ? selectedPrompts[key].map((promptPair: any, i: number) => (
+                      <button
+                        className="w-full p-2 my-2 text-sm text-center rounded-md text-slate-800 bg-slate-100"
+                        key={i}
+                        onClick={() => {
+                          sendPrompt(promptPair.question);
+                        }}>
+                        {promptPair.question}
+                      </button>
+                    ))
+                  : null}
+              </div>
+            ))}
+          </div>
 
-            {/* <div className="flex flex-col justify-center w-full my-2 text-center h-1/2">
+          {/* <div className="flex flex-col justify-center w-full my-2 text-center h-1/2">
               <div className="w-6 mx-auto">
                 <Image src={FeedbackAIBot} alt="AI Help Bot" />
               </div>
@@ -163,9 +205,8 @@ export default function AIChatWindow(props: any) {
                 </button>
               ))}
             </div> */}
-          </div>
-        )
-      }
+        </div>
+      )}
     </div>
   );
 }
