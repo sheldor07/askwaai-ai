@@ -1,6 +1,9 @@
-import { useState,useContext } from "react";
+
+import { useState, useContext } from "react";
 import { pairedPrompts } from "@/app/utils/pairedPrompts";
 import { UserContext } from "@/app/dashboard/layout";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
 type ChatHistoryItem = {
   question: string;
   response: any;
@@ -9,6 +12,7 @@ type ChatHistoryItem = {
 export default function AIChatWindow(props: any) {
   const user = useContext(UserContext);
   console.log("user", user);
+  const supabase = createClientComponentClient();
   const currentPage = props.currentPage;
   const essayData = props.essayData;
   const [chatScreen, setChatScreen] = useState(false);
@@ -21,6 +25,20 @@ export default function AIChatWindow(props: any) {
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
+  async function insertChatHistory(question: string, response: string) {
+    try {
+      const { data, error } = await supabase
+        .from("chat_histories")
+        .insert([{ message: question, response, user_uuid: user?.id }]);
+      if (error) {
+        console.error("Error inserting chat history:", error);
+      } else {
+        console.log("Chat history inserted successfully:", data);
+      }
+    } catch (error) {
+      console.error("Error inserting chat history:", error);
+    }
+  }
 
   async function sendPrompt(question: string) {
     setPrompt(question);
@@ -47,6 +65,7 @@ export default function AIChatWindow(props: any) {
       setGotResponse(true);
       setResponse(response?.verdict);
       setChatHistory([...chatHistory, { question, response }]);
+      insertChatHistory(question, response?.verdict); // Insert chat history here
     } catch (err) {
       console.log(err);
       setLoading(false);
