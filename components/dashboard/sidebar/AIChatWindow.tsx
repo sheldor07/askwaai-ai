@@ -24,7 +24,7 @@ export default function AIChatWindow(props: any) {
   const [loading, setLoading] = useState(false);
   const [gotResponse, setGotResponse] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
-
+  const [error, setError] = useState("");
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
@@ -99,6 +99,7 @@ export default function AIChatWindow(props: any) {
         console.log(err);
         setLoading(false);
         // Set error state
+        setError(err);
         setGotResponse(true);
         // Insert error message into chat history
         return "Error: " + err;
@@ -139,6 +140,8 @@ export default function AIChatWindow(props: any) {
       </div>
       {loading ? (
         <div>Loading...</div> // replace this with a spinner or loading animation
+      ) : error?.length > 0 ? (
+        <div>{error}</div>
       ) : chatScreen ? (
         <div className="overflow-auto h-96">
           {chatHistory.map(

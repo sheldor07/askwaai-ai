@@ -31,13 +31,20 @@ async function generateVerdict(essayData: string,prompt: string) {
 
   let user_prompt = `This is your user written data ${essayData}, and this is your prompt ${prompt} Limit your response to 500 characters.`;
   console.log("prompt", user_prompt);
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "system", content: system_prompt },
-      { role: "user", content: user_prompt },
-    ],
-  });
-  console.log("got from api", completion?.data?.choices[0]?.message?.content);
-  return completion?.data?.choices[0]?.message?.content;
+  try{
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: system_prompt },
+        { role: "user", content: user_prompt },
+      ],
+    });
+    console.log("got from api", completion?.data?.choices[0]?.message?.content);
+    return completion?.data?.choices[0]?.message?.content;
+  }
+  catch(e){
+    return "Sorry, I'm having trouble understanding your essay. Please try again.";
+  }
+
+
 }
