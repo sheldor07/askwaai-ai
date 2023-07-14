@@ -6,7 +6,7 @@ export default function AEIOUComp(props: {
   setAeiouData: any;
 }) {
   const firstLetter = props.name.substring(0, 1);
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     props.setAeiouData((prevState: any) => ({
       ...prevState,
       [firstLetter]: {
@@ -25,11 +25,8 @@ export default function AEIOUComp(props: {
       </div>
       <div className="block w-full min-h-[500px]">
         <textarea
-          type="text"
           className="p-4 mt-10 overflow-auto text-sm text-left text-gray-900 rounded-lg shadow-sm h-4/5 sm:text-md focus:ring-blue-500 focus:border-blue-500 "
-          onChange={(e: ChangeEvent) => {
-            handleChange(e);
-          }}></textarea>
+          onChange={(e)=>{handleChange(e)}}></textarea>
       </div>
 
       <p className="p-2 text-sm text-slate-400">{props.content}</p>

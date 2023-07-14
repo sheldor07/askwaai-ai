@@ -1,29 +1,34 @@
-import { useState, useContext, useEffect, useRef, use } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { pairedPrompts } from "@/app/utils/pairedPrompts";
 import { UserContext } from "@/app/dashboard/layout";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-
+import { PairedPrompts, Prompt } from "@/app/utils/pairedPrompts";
 type ChatHistoryItem = {
+  id: number;
   message: string;
-  response: any;
+  response: string;
+  user_uuid: string;
+  // include any other properties you expect to get from the database
 };
+// At the top of your file...
+
+// Later in your file...
 
 export default function AIChatWindow(props: any) {
   const user = useContext(UserContext);
   const supabase = createClientComponentClient();
-  const currentPage = props.currentPage;
+  const currentPage: keyof PairedPrompts = props.currentPage;
+  const selectedPrompts = pairedPrompts[currentPage];
   const essayData = props.essayData;
   const [chatScreen, setChatScreen] = useState(false);
-  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [gotResponse, setGotResponse] = useState(false);
-  const [response, setResponse] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
 
   const toggleChatScreen = () => {
     setChatScreen(!chatScreen);
   };
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,7 +49,7 @@ export default function AIChatWindow(props: any) {
         .eq("user_uuid", user?.id);
       if (error) {
         console.error("Error fetching chat history:", error);
-      } else {
+      } else if (chat_histories !== null) {
         setChatHistory(chat_histories);
       }
     } catch (error) {
@@ -108,8 +113,6 @@ export default function AIChatWindow(props: any) {
     fetchChatHistory();
   }
 
-  const selectedPrompts = pairedPrompts[currentPage];
-
   return (
     <div className="z-30 shadow-lg bg-white flex rounded-xl flex-col overflow-auto min-w-[500px] max-w-[500px] max-h-[600px] h-full align-items-center p-2">
       <div className="flex flex-row justify-between p-2 mb-4 bg-gray-100 border-2 rounded-lg shadow-lg border-slate-100">
@@ -165,20 +168,23 @@ export default function AIChatWindow(props: any) {
             {Object.keys(selectedPrompts).map((key, index) => (
               <div key={index}>
                 <p>{key}</p>
-                {Array.isArray(selectedPrompts[key])
-                  ? selectedPrompts[key].map((promptPair: any, i: number) => (
-                      <button
-                        className="w-full p-2 my-2 text-sm text-center rounded-md text-slate-800 bg-slate-100"
-                        key={i}
-                        onClick={() => {
-                          sendPrompt(promptPair.question);
-                        }}>
-                        {promptPair.question}
-                      </button>
-                    ))
+                {Array.isArray((selectedPrompts as any)[key])
+                  ? (selectedPrompts as any)[key].map(
+                      (promptPair: any, i: number) => (
+                        <button
+                          className="w-full p-2 my-2 text-sm text-center rounded-md text-slate-800 bg-slate-100"
+                          key={i}
+                          onClick={() => {
+                            sendPrompt(promptPair.question);
+                          }}>
+                          {promptPair.question}
+                        </button>
+                      )
+                    )
                   : null}
               </div>
             ))}
+
             {chatScreen && gotResponse ? <div ref={messagesEndRef} /> : null}
           </div>
 

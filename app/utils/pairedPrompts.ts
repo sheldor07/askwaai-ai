@@ -1,3 +1,23 @@
+
+export interface Prompt {
+  question: string;
+  prompt: string;
+}
+
+export interface PromptsCollection {
+  [key: string]: Prompt[];
+}
+
+export interface PairedPrompts {
+  default: Prompt[];
+  empathise: {
+    AEIOU: Prompt[];
+    Implicit: Prompt[];
+    Blog1: Prompt[];
+  };
+  question: PromptsCollection;
+  introduce: PromptsCollection;
+}
 export const pairedPrompts = {
     default: [
       {

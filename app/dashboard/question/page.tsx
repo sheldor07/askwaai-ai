@@ -37,7 +37,9 @@ export default function Page() {
         "Specify who, what where, when you are talking about. Clearify any vague words.",
     },
   ];
-  const [inputValues, setInputValues] = useState({
+  const [inputValues, setInputValues] = useState<{
+    [key: string | number]: string;
+  }>({
     0: "",
     1: "",
     2: "",
