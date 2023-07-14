@@ -1,4 +1,6 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import Sidebar from "@/components/dashboard/sidebar/AIHelpContainer";
 export default function Page() {
   const listOne = [
     "Give motivation to one’s writing",
@@ -35,6 +37,23 @@ export default function Page() {
         "Specify who, what where, when you are talking about. Clearify any vague words.",
     },
   ];
+  const [inputValues, setInputValues] = useState({
+    0: "",
+    1: "",
+    2: "",
+    3: "",
+    researchQuestion: "",
+  });
+
+  const handleInputChange = (index: any) => (e) => {
+    setInputValues({
+      ...inputValues,
+      [index]: e.target.value,
+    });
+  };
+  useEffect(() => {
+    console.log(inputValues);
+  }, [inputValues]);
   return (
     <div className="flex flex-col min-h-screen p-16 ml-24 bg-white">
       <div className="flex flex-col w-full ">
@@ -71,7 +90,11 @@ export default function Page() {
             <h2 className="mb-2 text-sm italic text-gray-500">
               {item.subheader}
             </h2>
-            <textarea className="w-full min-h-[200px] p-2 border rounded" />
+            <textarea
+              className="w-full min-h-[200px] p-2 border rounded"
+              value={inputValues[index] || ""}
+              onChange={handleInputChange(index)}
+            />
           </div>
         ))}
         <div className="col-span-2 p-2 border-2 rounded bg-slate-200">
@@ -81,9 +104,14 @@ export default function Page() {
           <h2 className="mb-2 text-sm italic text-gray-500">
             Write your research question here.
           </h2>
-          <textarea className="w-full min-h-[200px] p-2 border rounded" />
+          <textarea
+            className="w-full min-h-[200px] p-2 border rounded"
+            value={inputValues["researchQuestion"] || ""}
+            onChange={handleInputChange("researchQuestion")}
+          />
         </div>
       </div>
+      <Sidebar currentPage={"question"} essayData={inputValues} />
     </div>
   );
 }

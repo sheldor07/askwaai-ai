@@ -25,7 +25,7 @@ export default function Sidebar(props: any) {
         onClick={() => {
           toggleFeedback();
         }}
-        className="fixed rounded-full shadow-xl right-5 bottom-48 ">
+        className="fixed bg-white rounded-full shadow-xl right-5 bottom-48 ">
         <div className="p-2">
           <img src="/dashboard/sidebar/FeedbackNotebook.svg" alt="AI Help Bot" />
         </div>
@@ -40,7 +40,7 @@ export default function Sidebar(props: any) {
         onClick={() => {
           toggleChatWindow();
         }}
-        className="fixed rounded-full shadow-xl right-5 bottom-24 ">
+        className="fixed bg-white rounded-full shadow-xl right-5 bottom-24 ">
         <div className="p-2">
           <img src="/dashboard/sidebar/AIHelpBot.svg" alt="AI Help Bot" />
         </div>

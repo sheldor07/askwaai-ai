@@ -95,38 +95,30 @@ export const pairedPrompts = {
         },
       ],
     },
-    question: [
+    question:{
+
+    "Research Question": [
       {
-        question:
-          "Evaluate the openness of my research question. Does it encourage exploration and deep thinking?",
-        prompt:
-          "Please evaluate the openness of your research question. Does it encourage exploration and deep thinking?",
+        question: "Evaluate the openness of my research question. Does it encourage exploration and deep thinking?",
+        prompt: "Prompt: Please evaluate the openness of your research question. Does it encourage exploration and deep thinking?",
       },
       {
-        question:
-          "Assess the scope of my research question. Is it manageable within the space of the assignment?",
-        prompt:
-          "Please assess the scope of your research question. Is it manageable within the space of the assignment?",
+        question: "Assess the scope of my research question. Is it manageable within the space of the assignment?",
+        prompt: "Prompt: Please assess the scope of your research question. Is it manageable within the space of the assignment?",
       },
       {
-        question:
-          "Does my research question motivate my piece of writing? Does it give purpose and focus to my writing?",
-        prompt:
-          "Please evaluate the openness of your research question. Does it encourage exploration and deep thinking?",
+        question: "Does my research question motivate my piece of writing? Does it give purpose and focus to my writing?",
+        prompt: "Prompt: Please evaluate if your research question motivates your piece of writing. Does it provide purpose and focus to your writing?",
       },
       {
-        question:
-          "Will my research question lead to new learning about the topic?",
-        prompt:
-          "Please evaluate the openness of your research question. Does it encourage exploration and deep thinking?",
+        question: "Will my research question lead to new learning about the topic?",
+        prompt: "Prompt: Please assess if your research question will lead to new learning about the topic.",
       },
       {
-        question:
-          "Does my research question avoid formulations that lead to policy papers rather than exploratory op-eds?",
-        prompt:
-          "Please evaluate the openness of your research question. Does it encourage exploration and deep thinking?",
+        question: "Does my research question avoid formulations that lead to policy papers rather than exploratory op-eds?",
+        prompt: "Prompt: Please evaluate if your research question avoids formulations that lead to policy papers rather than exploratory op-eds.",
       },
-    ],
+    ]},
 
     introduce: {
       "Assignment 1": [
