@@ -5,9 +5,10 @@ import { useState } from "react";
 export default function NewPage() {
   const [essayData, setEssayData] = useState("");
 
-  const handleTextChange = (e) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEssayData(e.target.value);
   };
+
   return (
     <div className="flex flex-col min-h-screen p-16 ml-24 bg-white">
       <div className="flex flex-col">

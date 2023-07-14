@@ -45,12 +45,13 @@ export default function Page() {
     researchQuestion: "",
   });
 
-  const handleInputChange = (index: any) => (e) => {
-    setInputValues({
-      ...inputValues,
-      [index]: e.target.value,
-    });
-  };
+  const handleInputChange =
+    (index: any) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInputValues({
+        ...inputValues,
+        [index]: e.target.value,
+      });
+    };
   useEffect(() => {
     console.log(inputValues);
   }, [inputValues]);
