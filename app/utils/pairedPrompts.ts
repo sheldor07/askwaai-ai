@@ -165,4 +165,54 @@ export const pairedPrompts = {
       ],
     },
 
+    collate: {
+      "Working with Sources": [
+        {
+          "question": "What is the main argument of this source?",
+          "prompt": "Prompt: Can you summarize the main argument of this source in simple terms?"
+        },
+        {
+          "question": "How does the evidence in this source support its main claims?",
+          "prompt": "Prompt: Can you provide an example of how the evidence in this source supports its main claims?"
+        },
+        {
+          "question": "What potential logical fallacy does this source's argument contain?",
+          "prompt": "Prompt: Can you help me identify a potential logical fallacy in the argument provided by this source?"
+        },
+        {
+          "question": "How does a concept in this source relate to my research question?",
+          "prompt": "Prompt: Can you identify a concept in this source that addresses my research question either directly or indirectly?"
+        },
+        {
+          "question": "How does the perspective in this source enable me to look at my topic differently?",
+          "prompt": "Prompt: In what ways does the perspective offered in this source provide a new viewpoint on my research topic?"
+        },
+        {
+          "question": "What elements of this source verify its credibility?",
+          "prompt": "Prompt: What features should I consider in this source to ascertain its credibility?"
+        },
+        {
+          "question": "Are there potential biases in this source?",
+          "prompt": "Prompt: Can you assist me in identifying any potential biases in this source?"
+        },
+        {
+          "question": "How can this source help me answer my research question?",
+          "prompt": "Prompt: Given what's in this source, how could it potentially help me answer my research question?"
+        },
+        {
+          "question": "How can I extend or revise the claims from this source to create a compelling response to my research question?",
+          "prompt": "Prompt: How can I extend or revise the claims or concepts from this source to construct a persuasive response to my research question?"
+        },
+        {
+          "question": "How should I structure a correct citation for this source?",
+          "prompt": "Prompt: Can you guide me in creating a correct citation for this source?"
+        },
+        {
+          "question": "How can I apply an unrelated but interesting concept from this source to my research question?",
+          "prompt": "Prompt: This source isn't directly related to my topic, but discusses an interesting concept. Can you help me apply this concept to my research question?"
+        }
+      ]
+    },    
+    
+
 }

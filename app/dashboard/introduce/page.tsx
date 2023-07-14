@@ -13,9 +13,10 @@ export default function NewPage() {
     <div className="flex flex-col min-h-screen p-16 ml-24 bg-white">
       <div className="flex flex-col">
         <div>
-          <h1 className="text-4xl font-bold text-black">New Page Title</h1>
+          <h1 className="text-4xl font-bold text-black">Introduce Op-Ed</h1>
           <p className="my-4 text-black whitespace-pre-line text-md">
-            Add your text here.
+            Introduce your topic with your observation and how it lead to your
+            insights and chosen research question.{" "}
           </p>
         </div>
         <p className="my-12 text-lg">Title: Your New Page Title</p>
