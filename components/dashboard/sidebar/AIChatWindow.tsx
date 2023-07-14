@@ -32,6 +32,9 @@ export default function AIChatWindow(props: any) {
   useEffect(() => {
     scrollToBottom();
   }, [chatHistory]);
+  useEffect(() => {
+    console.log("Updated essayData: ", essayData);
+  }, [essayData]);
 
   async function fetchChatHistory() {
     try {

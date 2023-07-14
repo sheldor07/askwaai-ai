@@ -16,7 +16,7 @@ export const pairedPrompts = {
           question: "Evaluate the depth of my AEIOU observations.",
           prompt:  `Prompt: Please review the AEIOU observations provided and assess their depth. Consider the following aspects:
 
-          1. Are the activities described in sufficient detail? Are there any important actions or behaviors that might be missing?
+          1.t might be miss Are the activities described in sufficient detail? Are there any important actions or behaviors thaing?
           2. Is the overall environment adequately portrayed? Are there any contextual elements that should be highlighted?
           3. Do the interactions between individuals clearly contribute to reaching goals? Are there any additional effects worth mentioning?
           4. Are all relevant objects within the environment identified and described? Are there any noteworthy connections to people, activities, or interactions?

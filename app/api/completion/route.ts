@@ -10,9 +10,11 @@ export async function POST(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const prompt = searchParams.get("query");
-    const essayData  = await JSON.stringify(request.json());
+    const {essayData} = await request.json();
+
+    console.log("essay data in ai", essayData.essayData);
+    
     if(!essayData) throw new Error("No essay data provided");
-    console.log("essay data in ai", essayData);
 
     const verdict = await generateVerdict(prompt,essayData);
     return NextResponse.json({ verdict });

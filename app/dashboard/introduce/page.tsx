@@ -8,7 +8,6 @@ export default function NewPage() {
   const handleTextChange = (e) => {
     setEssayData(e.target.value);
   };
-  console.log(essayData);
   return (
     <div className="flex flex-col min-h-screen p-16 ml-24 bg-white">
       <div className="flex flex-col">
